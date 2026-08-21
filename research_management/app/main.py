@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-
+from app.routers import auth, users 
 from app.db.database import engine, Base
 # Import toàn bộ model để SQLAlchemy nhận diện và tạo bảng
 from app.models import user, research_project, research_task 
@@ -40,6 +40,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 def health_check():
     return {"status": "success", "message": "API đang hoạt động tốt!"}
 
-# Cách đăng ký các router sau này:
-# from app.routers import users, research_project, research_task
-# app.include_router(users.router, prefix="/users", tags=["Users"])
+
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app.include_router(users.router, prefix="/users", tags=["Users"])
