@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 from datetime import datetime
 from typing import Optional
 from app.models.user import UserRole
@@ -11,7 +11,7 @@ class UserBase(BaseModel):
 
 # 2. Create Schema: Dùng khi người dùng gửi Request tạo tài khoản
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(..., max_length=72, description="Mật khẩu tối đa 72 ký tự")
 
 # 3. Response Schema: Dùng để trả dữ liệu cho Frontend (Ẩn password đi)
 class UserResponse(UserBase):
