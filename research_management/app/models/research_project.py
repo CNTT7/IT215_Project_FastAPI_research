@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Enum as SQLEnum
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 import enum
 from app.db.database import Base
 
@@ -15,7 +15,7 @@ class ResearchProject(Base):
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False) # Khóa ngoại trỏ về bảng users
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
 
     owner = relationship("User", back_populates="owned_projects")
     tasks = relationship("ResearchTask", back_populates="project")
@@ -29,7 +29,7 @@ class ResearchMember(Base):
     project_id = Column(Integer, ForeignKey("research_projects.id"), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     role = Column(SQLEnum(MemberRole), nullable=False)
-    joined_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    joined_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
 
     project = relationship("ResearchProject", back_populates="members")
     user = relationship("User", back_populates="project_memberships")

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum as SQLEnum
 from sqlalchemy.orm import relationship
-from datetime import datetime
+import datetime
 import enum
 from app.db.database import Base
 
@@ -19,7 +19,7 @@ class User(Base):
     full_name = Column(String(255), nullable=False)
     role = Column(SQLEnum(UserRole), default=UserRole.USER)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc), nullable=False)
 
     # Quan hệ (Relationships): Giúp query dữ liệu liên kết dễ dàng
     # back_populates phải khớp với tên biến quan hệ ở các model khác
